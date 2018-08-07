@@ -1,6 +1,9 @@
 # shellcode_tools
-useful tools for writing shellcode 
+A collection of useful tools for writing shellcode 
 
+### patternLocOffset.py
+
+For generating a string to  calculate the offset of RA. 
 
 ### shell_extractor.py
 
