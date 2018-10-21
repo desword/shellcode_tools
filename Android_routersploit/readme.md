@@ -29,15 +29,18 @@
 		* [ref] https://github.com/termux/termux-packages/issues/2847
 		* install the following old version of openssl, and it should work.
 			* OpenSSL without no-engine config for AArch64: (in my test on HUAWEI MATE 8, the following packages should work)
-				* openssl_1.1.1-2_aarch64.deb.gz
-				* openssl-dev_1.1.1-2_aarch64.deb.gz
-				* openssl-tool_1.1.1-2_aarch64.deb.gz
+				* [openssl_1.1.1-2_aarch64.deb.gz](https://github.com/desword/shellcode_tools/raw/master/Android_routersploit/openssl_1.1.1-2_aarch64.deb.gz)
+				* [openssl-dev_1.1.1-2_aarch64.deb.gz](https://github.com/desword/shellcode_tools/raw/master/Android_routersploit/openssl-dev_1.1.1-2_aarch64.deb.gz)
+				* [openssl-tool_1.1.1-2_aarch64.deb.gz](https://github.com/desword/shellcode_tools/raw/master/Android_routersploit/openssl-tool_1.1.1-2_aarch64.deb.gz)
 			* OpenSSL without no-engine config for arm:
 				* openssl_1.1.1-2_arm.deb.gz
 				* openssl-dev_1.1.1-2_arm.deb.gz
 				* openssl-tool_1.1.1-2_arm.deb.gz
 			* download 
 				* using wget to download the above packages.
+				* wget https://github.com/desword/shellcode_tools/raw/master/Android_routersploit/openssl_1.1.1-2_aarch64.deb.gz
+				* wget https://github.com/desword/shellcode_tools/raw/master/Android_routersploit/openssl-dev_1.1.1-2_aarch64.deb.gz
+				* wget https://github.com/desword/shellcode_tools/raw/master/Android_routersploit/openssl-tool_1.1.1-2_aarch64.deb.gz
 			* [CMD]
 				* gunzip openssl_1.1.1-2_arm.deb.gz
 				* gunzip openssl-dev_1.1.1-2_arm.deb.gz
