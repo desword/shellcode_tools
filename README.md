@@ -1,6 +1,12 @@
 # shellcode_tools
 A collection of useful tools for writing shellcode 
 
+### Android_routersploit
+
+Setup the RouterSploit on Android based on termux.  [Procedure](https://github.com/desword/shellcode_tools/tree/master/Android_routersploit) 
+
+<img src="https://github.com/desword/shellcode_tools/blob/master/img/android_sploit.jpg" width = 50% height = 50% div align=center />
+
 ### patternLocOffset.py
 
 For generating a string to  calculate the offset of RA. 
