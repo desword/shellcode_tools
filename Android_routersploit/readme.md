@@ -1,15 +1,24 @@
-### 在android 手机上配置路由器攻击的环境
+### Setup RouterSploit on Android 
 
-![](https://github.com/desword/shellcode_tools/img/android_sploit.jpg)
 
+<img src="https://github.com/desword/shellcode_tools/blob/master/img/android_sploit.jpg" width = 50% height = 50% div align=center />
+
+* RouterSploit
+	* RouterSploit is a Exploitation Framework for Embedded Devices
+	* https://github.com/threat9/routersploit
 
 * download termux
     * https://cn.apksum.com/down/com.termux_0.65_free
     * install python on termux
-          * https://wiki.termux.com/wiki/Python
+        * https://wiki.termux.com/wiki/Python
 	* The default python of termux is python3, therefore it should work for routersploit.
-* errors when isntall routersploit on termux
-    * erros of compiling cffi
+	
+* Basic install command
+	* git clone https://www.github.com/threat9/routersploit
+	* cd routersploit
+	* pip install -r requirements.txt
+* Errors when isntall routersploit on termux
+    * errors of compiling cffi
 		* [ref] https://github.com/termux/termux-packages/issues/1964
 			* pkg install clang
 		* if file "ffi.h" can not find,then 
