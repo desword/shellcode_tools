@@ -17,7 +17,7 @@
 	* git clone https://www.github.com/threat9/routersploit
 	* cd routersploit
 	* pip install -r requirements.txt
-* Errors when isntall routersploit on termux
+* Errors when install routersploit on termux
     * errors of compiling cffi
 		* [ref] https://github.com/termux/termux-packages/issues/1964
 			* pkg install clang
