@@ -1,6 +1,30 @@
 # shellcode_tools
 A collection of useful tools for writing shellcode 
 
+### getOverFlowOffset
+
+* Requirements
+   * gdb
+   * patternLocOffset.py
+   * [pygdbmi](https://github.com/cs01/pygdbmi)
+      * `pip install pygdbmi`
+
+* Usage
+```
+[+] Usage: python getOverFlowOffset.py [vul_ret_address] [vul_program]
+[+] Hints: you give me vul_ret_address, I give you the offset :)
+[*] Example: python getOverFlowOffset.py 0x080484BD example_bin/xdctf
+```
+   * The example in example/bin
+   
+```
+$ python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200
+[+] Found offset to the EBP is 108.
+[+] THe offset to the RET_ADDR is 112 (32bits) or 116 (64bits).
+```
+
+
+
 ### Android_routersploit
 
 Setup the RouterSploit on Android based on termux.  [Procedure](https://github.com/desword/shellcode_tools/tree/master/Android_routersploit) 
