@@ -1,7 +1,24 @@
 # shellcode_tools
 A collection of useful tools for writing shellcode 
 
-### getOverFlowOffset
+### getOverFlowOffset.py
+
+
+* In previous, if you want to get the over flow offset to the EBP, you have to 
+   * 1. Find the vul function
+   * 2. Set the breakpoints of the `return address` on IDA.
+   * 3. Generating the pattern offset string file `passwd` using patternLocOffset.py
+   * 4. Run the program with the input of file `passwd`.
+      * 4.1 If the IDA runs on the host and the linux program runs on the guest, you have to copy `linux_server` to the guest and run it.
+      * 4.2 Run the IDA on the host.
+      * 4.3 Switch to the guest, copy the string of `passwd` into the waiting program `linux_server`.
+      * 4.4 Switch back to the host, see the content of `EBP`
+   * 5. Calculate the over flow offset using patternLocOffset.py again.
+
+* For now, you only need.
+   * 1. Find the vul function and put the `return address` into getOverFlowOffset.py
+   * 2. Boom! All set :).
+
 
 * Requirements
    * gdb
