@@ -25,7 +25,7 @@ from pygdbmi.gdbcontroller import GdbController
 
 def usage():
     print "[+] Usage: python getOverFlowOffset.py [vul_ret_address] [vul_program]"
-    print "[+] Hints: you should find the vul_ret_address in the vul function by yourself, then the rest of work is mine :)"
+    print "[+] Hints: you give me vul_ret_address, I give you the offset :)"
     print "[*] Example: python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200"
 
 
