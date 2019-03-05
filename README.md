@@ -50,7 +50,9 @@ Setup the RouterSploit on Android based on termux.  [Procedure](https://github.c
 
 ### patternLocOffset.py
 
+
 For generating a string to  calculate the offset of RA. 
+From the book <揭秘家用路由器0day漏洞挖掘技术>
 
 ### shell_extractor.py
 
