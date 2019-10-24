@@ -26,20 +26,36 @@ A collection of useful tools for writing shellcode
    * [pygdbmi](https://github.com/cs01/pygdbmi)
       * `pip install pygdbmi`
 
+* Change log
+   * 2019-10-24 16:23:07
+      * Add support for dealing with programs that enable PIE.
+      * Fix bugs of matching the output of $ebp. For both decimal and hex.
+
 * Usage
 ```
 [+] Usage: python getOverFlowOffset.py [vul_ret_address] [vul_program]
 [+] Hints: you give me vul_ret_address, I give you the offset :)
-[*] Example: python getOverFlowOffset.py 0x080484BD example_bin/xdctf
+[*] Example: python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200
 ```
-   * The example in example/bin
-   
+   * We now support tracking the program enabling PIE. The example in example_bin/pwn200_PIE   
 ```
-$ python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200
+$ python getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE
+[*] example_bin/pwn200_PIE is 32 bits
+[*] PIE is enabled
+[*] Found a leak function: write
+[*] Found the leaked address 0x565556c2, we can leave
+[*] The real vul_ret_address is:0x56555632
 [+] Found offset to the EBP is 108.
 [+] THe offset to the RET_ADDR is 112 (32bits) or 116 (64bits).
 ```
-
+   * For the program without PIE. The example in example_bin/xdctf15-pwn200
+```
+$ python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200
+[*] example_bin/xdctf15-pwn200 is 32 bits
+[*] no PIE
+[+] Found offset to the EBP is 108.
+[+] THe offset to the RET_ADDR is 112 (32bits) or 116 (64bits).
+```
 
 
 ### Android_routersploit
