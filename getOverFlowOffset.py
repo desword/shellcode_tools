@@ -20,6 +20,13 @@ def usage():
     print "[*] Example: python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200"
 
 
+def print_log(response):
+	for each in response:
+		try:
+			print "[%s]\t%s\t%s" % (each['type'], each['message'], each['payload']) 
+		except:
+			pass
+
 try:
     ret_address = sys.argv[1]
     target_program = sys.argv[2]
@@ -41,16 +48,16 @@ gdbmi = GdbController()
 # print(gdbmi.get_subprocess_cmd())  # print actual command run as subprocess
 
 response = gdbmi.write('-file-exec-file %s' % (target_program))
-# print(response)
+# print_log(response)
 
 response = gdbmi.write('break *%s' % (ret_address))
-# print(response)
+# print_log(response)
 
 response = gdbmi.write('run < %s' % (pattern_file_name))
-# print(response)
+# print_log(response)
 
 response = gdbmi.write('print $ebp')
-# print(response)
+# print_log(response)
 
 over_write_str = ""
 for eachResp in response:
@@ -60,9 +67,14 @@ for eachResp in response:
 	except:
 		pass
 
+# transform the offset into hex.
+if over_write_str.find('0x') == -1:
+	over_write_str = hex(int(over_write_str))
+
 # finally, to find the offset to the EBP.
 op = commands.getstatusoutput("python patternLocOffset.py -l %d -s %s" % (pattern_len, over_write_str))
 op_str = op[1]
+# print_log(op)
 
 op = commands.getstatusoutput("rm %s" % (pattern_file_name))
 
