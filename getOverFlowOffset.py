@@ -139,8 +139,10 @@ except:
     usage()
     exit(1)
 
-# ret_address = "0x00632"
+
+# ret_address = "0x080484BD"
 # target_program = "example_bin/xdctf15-pwn200"
+# ret_address = "0x00632"
 # target_program = "example_bin/pwn200_PIE"
 # target_program = "example_bin/pwn200_PIE_64bits"
 
@@ -162,16 +164,25 @@ print "[*] %s is %s bits" % (target_program, tmp3)
 programBits = int(tmp3)
 
 
-### check whether enable PIE. We now only check the ret_address to infer whether enabling PIE.
-smallInt_check = 0xfff
-addre_to_int = int(ret_address, 16)
-if addre_to_int < smallInt_check:
-	enablePIE=1
-	print "[*] PIE is enabled"
-else:
-	enablePIE=0
-	print "[*] no PIE"
+### [old way]check whether enable PIE. We now only check the ret_address to infer whether enabling PIE.
+# smallInt_check = 0xfff
+# addre_to_int = int(ret_address, 16)
+# if addre_to_int < smallInt_check:
+# 	enablePIE=1
+# 	print "[*] PIE is enabled"
+# else:
+# 	enablePIE=0
+# 	print "[*] no PIE"
 
+### check whether enable PIE. classic way. PIE program is .so, while non-PIE is executable.
+op = commands.getstatusoutput("readelf -h %s | grep Type" % (target_program))
+# print op
+if op[1].find("Shared object file") != -1:
+	print "[*] PIE is enabled"
+	enablePIE = 1
+elif op[1].find("Executable file") != -1:
+	print "[*] no PIE"
+	enablePIE = 0
 
 
 ### if PIE is enabled, we first infer the real vul_ret_address.
