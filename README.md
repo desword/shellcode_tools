@@ -39,7 +39,8 @@ A collection of useful tools for writing shellcode
 [+] Hints: you give me vul_ret_address, I give you the offset :)
 [*] Example: python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200
 ```
-    * We now support tracking the program enabling PIE. The example in example_bin/pwn200_PIE   
+   * We now support tracking the program enabling PIE. The example in example_bin/pwn200_PIE   
+
 ```
 $ python getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE
 [*] example_bin/pwn200_PIE is 32 bits
@@ -49,7 +50,7 @@ $ python getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE
 [*] The real vul_ret_address is:0x56555632
 [+] Found offset to the RET_ADDR is 112 (32bits) or 116 (64bits).
 ```
-    * For the program without PIE. The example in example_bin/2018_xnuca_gets_noleave. Also, it has no `leave` instruction before `ret`.
+   * For the program without PIE. The example in example_bin/2018_xnuca_gets_noleave. Also, it has no `leave` instruction before `ret`.
 ```
 $ python getOverFlowOffset.py 0x400434 example_bin/2018_xnuca_gets_noleave 
 [*] example_bin/2018_xnuca_gets_noleave is 64 bits
@@ -59,13 +60,13 @@ $ python getOverFlowOffset.py 0x400434 example_bin/2018_xnuca_gets_noleave
 
 * Other examples
     * 32-bit program, without PIE, with `leave` instruction.
-        * python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200
+        * `python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200`
     * 32-bit program, with PIE, with `leave` instruction.
-        * getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE
+        * `python getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE`
     * 64-bit program, with PIE, with `leave` instruction.
-        * python getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE_64bits
+        * `python getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE_64bits`
     * 32-bit program, without PIE, without `leave` instruction.
-        * python getOverFlowOffset.py 0x400434 example_bin/2018_xnuca_gets_noleave 
+        * `python getOverFlowOffset.py 0x400434 example_bin/2018_xnuca_gets_noleave `
 
 ### Android_routersploit
 
