@@ -27,7 +27,9 @@ A collection of useful tools for writing shellcode
       * `pip install pygdbmi`
 
 * Change log
-   * 2019-10-24 16:23:07
+   * 2019-11-2
+   	  * Fix bugs of programs without `leave` instruction. (Fetch the offset ot the RET_address from $rsp/$esp directly).
+   * 2019-10-24
       * Add support for dealing with programs that enable PIE.
       * Fix bugs of matching the output of $ebp. For both decimal and hex.
 
@@ -37,7 +39,7 @@ A collection of useful tools for writing shellcode
 [+] Hints: you give me vul_ret_address, I give you the offset :)
 [*] Example: python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200
 ```
-   * We now support tracking the program enabling PIE. The example in example_bin/pwn200_PIE   
+    * We now support tracking the program enabling PIE. The example in example_bin/pwn200_PIE   
 ```
 $ python getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE
 [*] example_bin/pwn200_PIE is 32 bits
@@ -45,18 +47,25 @@ $ python getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE
 [*] Found a leak function: write
 [*] Found the leaked address 0x565556c2, we can leave
 [*] The real vul_ret_address is:0x56555632
-[+] Found offset to the EBP is 108.
-[+] THe offset to the RET_ADDR is 112 (32bits) or 116 (64bits).
+[+] Found offset to the RET_ADDR is 112 (32bits) or 116 (64bits).
 ```
-   * For the program without PIE. The example in example_bin/xdctf15-pwn200
+    * For the program without PIE. The example in example_bin/2018_xnuca_gets_noleave. Also, it has no `leave` instruction before `ret`.
 ```
-$ python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200
-[*] example_bin/xdctf15-pwn200 is 32 bits
+$ python getOverFlowOffset.py 0x400434 example_bin/2018_xnuca_gets_noleave 
+[*] example_bin/2018_xnuca_gets_noleave is 64 bits
 [*] no PIE
-[+] Found offset to the EBP is 108.
-[+] THe offset to the RET_ADDR is 112 (32bits) or 116 (64bits).
+[+] Found offset to the RET_ADDR is 24 (32bits) or 28 (64bits).
 ```
 
+* Other examples
+    * 32-bit program, without PIE, with `leave` instruction.
+        * python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200
+    * 32-bit program, with PIE, with `leave` instruction.
+        * getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE
+    * 64-bit program, with PIE, with `leave` instruction.
+        * python getOverFlowOffset.py 0x00000632 example_bin/pwn200_PIE_64bits
+    * 32-bit program, without PIE, without `leave` instruction.
+        * python getOverFlowOffset.py 0x400434 example_bin/2018_xnuca_gets_noleave 
 
 ### Android_routersploit
 

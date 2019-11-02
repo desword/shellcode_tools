@@ -29,15 +29,27 @@ def print_log(response):
 			pass
 
 
-def parse_response(response, typeList):
+def parse_response(response, type):
+	parse_results = []
+	for each in response:
+		try:
+			if each['type'] in type:
+				parse_results.append(each['payload']) 
+		except:
+			pass
+	return parse_results
+
+
+def parse_response_list(response, typeList):
 	parse_results = []
 	for each in response:
 		try:
 			if each['type'] in typeList:
-				parse_results.append( (each['type'], each['payload']) )
+				parse_results.append(   (each['type'], each['payload'])) 
 		except:
 			pass
 	return parse_results
+
 
 
 def find_real_vulret_address():
@@ -91,7 +103,7 @@ def find_real_vulret_address():
 		# print_log(response)
 
 		typeList =["console"]
-		results = parse_response(response, typeList)
+		results = parse_response_list(response, typeList)
 		# print results
 
 
@@ -205,22 +217,47 @@ response = gdbmi.write('break *%s' % (ret_address))
 response = gdbmi.write('run < %s' % (pattern_file_name))
 # print_log(response)
 
-response = gdbmi.write('print $ebp')
+
+### previously print ebp, to infer ret_address. However, without leave; ret. It will produce error.
+# if programBits == 32:
+# 	response = gdbmi.write('print $ebp')
+# elif programBits == 64:
+# 	response = gdbmi.write('print $rbp')
 # print_log(response)
 
+# over_write_str = ""
+# for eachResp in response:
+# 	try:
+# 		eachResp['payload'].index("$1")
+# 		over_write_str = eachResp['payload'].split(" ")[-1]
+# 	except:
+# 		pass
+
+# # transform the offset into hex.
+# if over_write_str.find('0x') == -1:
+# 	over_write_str = hex(int(over_write_str))
+
+#### change to directly print the offset to retaddress.
+if programBits == 32:
+	response = gdbmi.write('x/2 $esp')
+elif programBits == 64:
+	response = gdbmi.write('x/2 $rsp')
+# print_log(response)
+rsp_list = parse_response(response, 'console')
 over_write_str = ""
-for eachResp in response:
-	try:
-		eachResp['payload'].index("$1")
-		over_write_str = eachResp['payload'].split(" ")[-1]
-	except:
-		pass
+for eachRsp in rsp_list:
+	if eachRsp.find("0x7ff") != -1 or eachRsp.find("0xff") != -1:
+		tmpstr = eachRsp.split('\\t')[-1]
+		try:
+			tmpInt = int(tmpstr)
+		except:
+			tmpInt = int(tmpstr[:-2])
+		over_write_str = hex(tmpInt)
+		break;
 
-# transform the offset into hex.
-if over_write_str.find('0x') == -1:
-	over_write_str = hex(int(over_write_str))
 
-# finally, to find the offset to the EBP.
+
+# finally, to find the offset to the ret_address.
 op = commands.getstatusoutput("python patternLocOffset.py -l %d -s %s" % (pattern_len, over_write_str))
 op_str = op[1]
 # print_log(op)
@@ -236,9 +273,8 @@ else:
 	print "[-] No matches. Check the return address."
 	exit(1)
 
-print "[+] Found offset to the EBP is %d." % (offset_find)
-print "[+] THe offset to the RET_ADDR is %d (32bits) or %d (64bits)." % (offset_find + 4, offset_find + 8)
+# print "[+] Found offset to the EBP is %d." % (offset_find)
+# print "[+] THe offset to the RET_ADDR is %d (32bits) or %d (64bits)." % (offset_find + 4, offset_find + 8)
 
 
-
-
+print "[+] Found offset to the RET_ADDR is %d (32bits) or %d (64bits)." % (offset_find, offset_find+4)
