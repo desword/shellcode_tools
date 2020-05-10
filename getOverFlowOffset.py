@@ -1,5 +1,5 @@
 
-# import commands
+import commands
 import os
 import sys
 import subprocess
@@ -10,20 +10,20 @@ from pygdbmi.gdbcontroller import GdbController
 # The rough steps.
 # 1. get the return address. We need to provide the retun address. in the vuladdress.
 # 2. using gdb to set breakpoints at the return address.
-# 3. generate the patternoffset files, and read the files to print(into the program.
+# 3. generate the patternoffset files, and read the files to print into the program.
 # 4. run the program using gdb until the breakpoints.
-# 5. print(the EBP value and calculate the offset using pattern offset.
+# 5. print the EBP value and calculate the offset using pattern offset.
 
 def usage():
-    print("[+] Usage: python getOverFlowOffset.py [vul_ret_address] [vul_program]")
-    print("[+] Hints: you give me vul_ret_address, I give you the offset :)")
-    print("[*] Example: python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200")
+    print "[+] Usage: python getOverFlowOffset.py [vul_ret_address] [vul_program]"
+    print "[+] Hints: you give me vul_ret_address, I give you the offset :)"
+    print "[*] Example: python getOverFlowOffset.py 0x080484BD example_bin/xdctf15-pwn200"
 
 
 def print_log(response):
 	for each in response:
 		try:
-			print("[%s]\t%s\t%s" % (each['type'], each['message'], each['payload']) )
+			print "[%s]\t%s\t%s" % (each['type'], each['message'], each['payload']) 
 			# return [each['type'], each['message'], each['payload']]
 		except:
 			pass
@@ -56,11 +56,11 @@ def find_real_vulret_address():
 	global ret_address
 
 	# search the usable functions. 
-	op = subprocess.getstatusoutput("strings  %s" % (target_program))
-	# print(op
+	op = commands.getstatusoutput("strings  %s" % (target_program))
+	# print op
 	leakAddrFunc = "" # used for lead the real address.
 	tmp1 = op[1].split('\n')
-	# print(tmp1
+	# print tmp1
 	for eachStr in tmp1:
 		if eachStr in funcListOut:
 			leakAddrFunc = eachStr
@@ -71,9 +71,9 @@ def find_real_vulret_address():
 				leakAddrFunc = eachStr
 				break;
 	if leakAddrFunc == "":
-		print("[-] No leak functions can be used. Can not leak the real address.")
+		print "[-] No leak functions can be used. Can not leak the real address."
 		exit(1)
-	print("[*] Found a leak function: %s" % leakAddrFunc)
+	print "[*] Found a leak function: %s" % leakAddrFunc
 
 
 	gdbmi = GdbController()
@@ -95,16 +95,16 @@ def find_real_vulret_address():
 	realAddress = ""
 	while True:
 		if programBits == 32:
-			response = gdbmi.write('print($eip')
-			response = gdbmi.write('print($eip')
+			response = gdbmi.write('print $eip')
+			response = gdbmi.write('print $eip')
 		elif programBits == 64:
-			response = gdbmi.write('print($rip')
-			response = gdbmi.write('print($rip')
+			response = gdbmi.write('print $rip')
+			response = gdbmi.write('print $rip')
 		# print_log(response)
 
 		typeList =["console"]
 		results = parse_response_list(response, typeList)
-		# print(results
+		# print results
 
 
 
@@ -115,13 +115,13 @@ def find_real_vulret_address():
 				isOkToLeave = 0
 				break;
 		if isOkToLeave == 1: # now we found the real address and can leave.
-			# print("[*] Found the real address, we can leave" 
+			# print "[*] Found the real address, we can leave" 
 			### extract the address from the result.
 			m = re.search(r"0x([a-f0-9]+)", results[0][1])
 			if m:
-				# print("[*] address 0x%s" % (m.group(1)) 
+				# print "[*] address 0x%s" % (m.group(1)) 
 				realAddress = m.group(1)
-				print("[*] Found the leaked address 0x%s, we can leave" % (realAddress) )
+				print "[*] Found the leaked address 0x%s, we can leave" % (realAddress) 
 
 			break;
 
@@ -135,7 +135,7 @@ def find_real_vulret_address():
 
 	### now we can compus the real vul_ret_address.
 	ret_address = "0x" + realAddress[:-3] + ret_address[-3:]
-	print("[*] The real vul_ret_address is:%s" % (ret_address))
+	print "[*] The real vul_ret_address is:%s" % (ret_address)
 
 ### list of functions for combating with program enabling PIE.
 funcListIn = ['read', 'gets', 'scanf']
@@ -167,12 +167,12 @@ enablePIE = 0
 
 
 ### check program is 32bits or 64 bits.
-op = subprocess.getstatusoutput("file  %s" % (target_program))
-# print(op)
+op = commands.getstatusoutput("file  %s" % (target_program))
+# print op
 tmp1 = op[1].split(':')[1]
 tmp2 = tmp1.split(' ')[2]
 tmp3 = tmp2.split('-')[0]
-print("[*] %s is %s bits" % (target_program, tmp3))
+print "[*] %s is %s bits" % (target_program, tmp3)
 programBits = int(tmp3)
 
 
@@ -181,19 +181,19 @@ programBits = int(tmp3)
 # addre_to_int = int(ret_address, 16)
 # if addre_to_int < smallInt_check:
 # 	enablePIE=1
-# 	print("[*] PIE is enabled"
+# 	print "[*] PIE is enabled"
 # else:
 # 	enablePIE=0
-# 	print("[*] no PIE"
+# 	print "[*] no PIE"
 
 ### check whether enable PIE. classic way. PIE program is .so, while non-PIE is executable.
-op = subprocess.getstatusoutput("readelf -h %s | grep Type" % (target_program))
-# print(op
+op = commands.getstatusoutput("readelf -h %s | grep Type" % (target_program))
+# print op
 if op[1].find("Shared object file") != -1:
-	print("[*] PIE is enabled")
+	print "[*] PIE is enabled"
 	enablePIE = 1
 elif op[1].find("Executable file") != -1:
-	print("[*] no PIE")
+	print "[*] no PIE"
 	enablePIE = 0
 
 
@@ -202,11 +202,11 @@ if enablePIE == 1:
 	find_real_vulret_address()
 
 
-op = subprocess.getstatusoutput("python patternLocOffset.py -l %d -f %s -c" % (pattern_len, pattern_file_name))
+op = commands.getstatusoutput("python patternLocOffset.py -l %d -f %s -c" % (pattern_len, pattern_file_name))
 
 # Start gdb process
 gdbmi = GdbController()
-# print(gdbmi.get_subprocess_cmd())  # print(actual command run as subprocess
+# print(gdbmi.get_subprocess_cmd())  # print actual command run as subprocess
 
 response = gdbmi.write('-file-exec-file %s' % (target_program))
 # print_log(response)
@@ -218,11 +218,11 @@ response = gdbmi.write('run < %s' % (pattern_file_name))
 # print_log(response)
 
 
-### previously print(ebp, to infer ret_address. However, without leave; ret. It will produce error.
+### previously print ebp, to infer ret_address. However, without leave; ret. It will produce error.
 # if programBits == 32:
-# 	response = gdbmi.write('print($ebp')
+# 	response = gdbmi.write('print $ebp')
 # elif programBits == 64:
-# 	response = gdbmi.write('print($rbp')
+# 	response = gdbmi.write('print $rbp')
 # print_log(response)
 
 # over_write_str = ""
@@ -237,7 +237,7 @@ response = gdbmi.write('run < %s' % (pattern_file_name))
 # if over_write_str.find('0x') == -1:
 # 	over_write_str = hex(int(over_write_str))
 
-#### change to directly print(the offset to retaddress.
+#### change to directly print the offset to retaddress.
 if programBits == 32:
 	response = gdbmi.write('x/2 $esp')
 elif programBits == 64:
@@ -258,11 +258,11 @@ for eachRsp in rsp_list:
 
 
 # finally, to find the offset to the ret_address.
-op = subprocess.getstatusoutput("python patternLocOffset.py -l %d -s %s" % (pattern_len, over_write_str))
+op = commands.getstatusoutput("python patternLocOffset.py -l %d -s %s" % (pattern_len, over_write_str))
 op_str = op[1]
 # print_log(op)
 
-op = subprocess.getstatusoutput("rm %s" % (pattern_file_name))
+op = commands.getstatusoutput("rm %s" % (pattern_file_name))
 
 
 offset_find = -1
@@ -270,11 +270,11 @@ m = re.search(r'offset \d+', op_str)
 if m is not None:
 	offset_find = int(m.group().split(" ")[-1])
 else:
-	print("[-] No matches. Check the return address.")
+	print "[-] No matches. Check the return address."
 	exit(1)
 
-# print("[+] Found offset to the EBP is %d." % (offset_find)
-# print("[+] THe offset to the RET_ADDR is %d (32bits) or %d (64bits)." % (offset_find + 4, offset_find + 8)
+# print "[+] Found offset to the EBP is %d." % (offset_find)
+# print "[+] THe offset to the RET_ADDR is %d (32bits) or %d (64bits)." % (offset_find + 4, offset_find + 8)
 
 
-print("[+] Found offset to the RET_ADDR is %d (32bits) or %d (64bits)." % (offset_find, offset_find+4))
+print "[+] Found offset to the RET_ADDR is %d (32bits) or %d (64bits)." % (offset_find, offset_find+4)

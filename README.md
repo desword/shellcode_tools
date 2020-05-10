@@ -24,9 +24,11 @@ A collection of useful tools for writing shellcode
    * gdb
    * patternLocOffset.py
    * [pygdbmi](https://github.com/cs01/pygdbmi)
-      * `pip install pygdbmi`
+      * `pip install pygdbmi==0.9.0.2`
 
 * Change log
+   * 2020-5-10
+   	  * Fix pygdbmi version bug. 0.9.0.3 only support python3, but there are many bugs. So we fix it to 0.9.0.2.
    * 2019-11-2
    	  * Fix bugs of programs without `leave` instruction. (Fetch the offset ot the RET_address from $rsp/$esp directly).
    * 2019-10-24
